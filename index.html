@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>La Voz del Barrio — Corpus Christi, Misiones</title>
+
+  <!-- Fonts & icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="" crossorigin="anonymous">
+
+  <style>
+    :root{
+      --color-primary: #2c3e50;
+      --color-secondary:#e74c3c;
+      --color-background:#f8f9fa;
+      --text:#333;
+      --shadow: 0 6px 18px rgba(0,0,0,0.08);
+      --shadow-hover: 0 10px 28px rgba(0,0,0,0.12);
+      --radius:12px;
+      --transition: all .28s ease;
+      --header-height: 76px; /* se actualizará por JS */
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:"Open Sans",system-ui,Arial,sans-serif;
+      color:var(--text);
+      background:var(--color-background);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      line-height:1.6;
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+      padding-top:var(--header-height); /* evita solapamiento con header fijo */
+    }
+
+    /* skip link */
+    .skip-link{
+      position:absolute;left:0;top:-40px;background:var(--color-secondary);color:#fff;padding:8px;z-index:2000;
+    }
+    .skip-link:focus{top:8px}
+
+    /* Header */
+    header{
+      position:fixed;left:0;right:0;top:0;z-index:1500;
+      background:rgba(44,62,80,0.96);backdrop-filter:blur(6px);color:#fff;padding:1rem 0;box-shadow:var(--shadow);
+      transition:var(--transition);
+    }
+    header.scrolled{box-shadow:var(--shadow-hover);padding:.6rem 0}
+    .container{width:92%;max-width:1280px;margin:0 auto;padding:0 1rem}
+    .header-row{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .logo{display:flex;align-items:center;gap:.75rem}
+    .logo .icon{font-size:1.6rem;color:var(--color-secondary)}
+    .logo-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.15rem}
+    .logo-sub{font-size:.85rem;opacity:.85}
+
+    nav{position:relative}
+    nav ul{display:flex;gap:1.6rem;list-style:none;align-items:center}
+    nav a{color:#fff;text-decoration:none;font-weight:600;padding:.45rem 0;position:relative}
+    nav a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:3px;background:var(--color-secondary);transition:var(--transition)}
+    nav a:hover::after, nav a.active::after{width:100%}
+
+    /* Mobile menu button */
+    .btn-menu{display:none;background:transparent;border:0;color:#fff;font-size:1.2rem;padding:.4rem;border-radius:6px;cursor:pointer}
+    .btn-menu:focus{outline:3px solid rgba(231,76,60,.25);outline-offset:2px}
+
+    /* Hero */
+    .hero{
+      background:
+        linear-gradient(135deg, rgba(44,62,80,0.82), rgba(231,76,60,0.75)),
+        url('https://images.unsplash.com/photo-1593941707882-a5b2b78a6083?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      color:#fff;
+      display:flex;align-items:center;justify-content:center;text-align:center;
+      min-height:calc(80vh);padding:4rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    .hero .inner{max-width:980px}
+    .hero h1{font-family:'Montserrat';font-size:clamp(1.9rem,4.5vw,3.4rem);line-height:1.05;margin-bottom:1rem;text-shadow:2px 2px 10px rgba(0,0,0,.45)}
+    .hero p{font-size:clamp(1rem,2.4vw,1.35rem);margin-bottom:1.25rem}
+
+    .btn{display:inline-flex;gap:.6rem;align-items:center;background:linear-gradient(135deg,var(--color-secondary),#c0392b);color:#fff;padding:.8rem 1.4rem;border-radius:999px;border:0;cursor:pointer;font-weight:700;box-shadow:var(--shadow)}
+    .btn:focus{outline:3px solid rgba(255,255,255,.12);outline-offset:3px}
+    .btn:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+
+    /* Sections */
+    section{padding:4.2rem 0}
+    .section-title{text-align:center;margin-bottom:1.6rem}
+    .section-title h2{font-family:'Montserrat';font-size:clamp(1.6rem,3.4vw,2.4rem)}
+    .section-intro{max-width:880px;margin:0 auto;color:#444;font-size:1rem}
+
+    /* Location */
+    .location-grid{display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;margin-top:1.25rem}
+    .map-wrap{flex:1;min-width:300px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);min-height:320px;background:#eee;border:1px solid rgba(0,0,0,.06)}
+    .map-wrap iframe{width:100%;height:100%;min-height:320px;border:0;display:block}
+    .location-info{flex:1;min-width:300px}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:1rem}
+    .stat{background:#fff;padding:1rem;border-radius:10px;box-shadow:var(--shadow);text-align:center;border:1px solid rgba(0,0,0,.04)}
+    .stat .num{font-weight:700;color:var(--color-secondary);font-size:1.3rem;margin-bottom:.25rem}
+    .stat .label{color:#333;font-weight:600;font-size:.95rem}
+
+    /* Problem grid (images) */
+    .problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.2rem}
+    .card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid rgba(0,0,0,.04)}
+    .card .img-wrap{height:200px;overflow:hidden}
+    .card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+    .card:hover img{transform:scale(1.05)}
+    .card .body{padding:1rem;flex:1;display:flex;flex-direction:column}
+    .card h3{font-size:1.05rem;margin-bottom:.5rem;color:var(--color-primary)}
+    .card p{flex:1;color:#555;margin-bottom:.5rem}
+    .read-more{color:var(--color-secondary);text-decoration:none;font-weight:700}
+
+    /* Interview / audio */
+    .interview{display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap}
+    .avatar{width:110px;height:110px;border-radius:50%;overflow:hidden;border:4px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .interview .info{flex:1;min-width:220px}
+    .audio-player{background:linear-gradient(180deg,#fff,#fafafa);padding:1rem;border-radius:12px;box-shadow:var(--shadow);display:flex;gap:1rem;align-items:center;max-width:900px;margin-top:1rem}
+    .play-btn{width:56px;height:56px;border-radius:50%;border:0;background:var(--color-secondary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
+    .play-btn:focus{outline:3px solid rgba(231,76,60,.22);outline-offset:3px}
+    .progress{flex:1;height:10px;background:#e6e6e6;border-radius:999px;overflow:hidden;cursor:pointer}
+    .progress .bar{height:100%;width:0;background:var(--color-secondary);transition:width .15s linear}
+    .time{min-width:110px;text-align:right;color:#444;font-weight:600;font-size:.95rem}
+
+    /* Reflection area (dark) */
+    .reflection{background:linear-gradient(135deg,var(--color-primary),#111827);color:#fff;border-top:1px solid rgba(255,255,255,0.03)}
+    .reflection .inner{max-width:920px;margin:0 auto;padding:2.4rem 1rem;text-align:center}
+    .highlight{color:#ffd6d0;font-weight:700;position:relative}
+
+    /* Footer */
+    footer{margin-top:auto;background:var(--color-primary);color:#fff;padding:2.4rem 0}
+    footer .foot-inner{max-width:1100px;margin:0 auto;text-align:center}
+    footer a{color:#fff;text-decoration:underline;opacity:.95}
+
+    /* Fade in helper */
+    .fade {opacity:0;transform:translateY(28px);transition:opacity .6s,transform .6s}
+    .fade.visible{opacity:1;transform:none}
+
+    /* Responsive */
+    @media (max-width:900px){
+      nav ul{display:none;position:absolute;right:1rem;top:calc(100% + 8px);flex-direction:column;background:rgba(44,62,80,0.98);border-radius:8px;padding:.6rem;min-width:200px}
+      nav ul.show{display:flex}
+      .btn-menu{display:inline-flex}
+      nav ul a{padding:.6rem 1rem;display:block}
+      .hero{min-height:56vh;padding:3rem 1rem}
+      .interview{flex-direction:column;align-items:center}
+      .avatar{margin-bottom:.6rem}
+      .time{text-align:center}
+      body{padding-top:var(--header-height)}
+    }
+    @media (max-width:480px){
+      .hero h1{font-size:1.6rem}
+      .hero p{font-size:.95rem}
+    }
+  </style>
+</head>
+<body>
+  <!-- Accessibility skip link -->
+  <a href="#main" class="skip-link">Saltar al contenido principal</a>
+
+  <!-- Header -->
+  <header id="site-header" role="banner">
+    <div class="container header-row">
+      <div class="logo" aria-hidden="false">
+        <span class="icon"><i class="fas fa-microphone-alt" aria-hidden="true"></i></span>
+        <div>
+          <div class="logo-title">La Voz del Barrio</div>
+          <div class="logo-sub">Corpus Christi, Misiones</div>
+        </div>
+      </div>
+
+      <nav role="navigation" aria-label="Menú principal">
+        <button id="menu-toggle" class="btn-menu" aria-expanded="false" aria-controls="main-nav" title="Abrir menú" aria-label="Abrir menú">
+          <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+        <ul id="main-nav">
+          <li><a href="#hero" class="nav-link active">Inicio</a></li>
+          <li><a href="#location" class="nav-link">Zona</a></li>
+          <li><a href="#problema" class="nav-link">Problema</a></li>
+          <li><a href="#entrevista" class="nav-link">Entrevista</a></li>
+          <li><a href="#reflexion" class="nav-link">Reflexión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="main" aria-labelledby="main-title">
+    <section id="hero" class="hero" role="region" aria-label="Portada">
+      <div class="inner fade" id="main-title">
+        <h1>Los Caminos Olvidados de Corpus Christi</h1>
+        <p>Mientras las grandes ciudades debaten asfalto, en nuestro pueblo el barro y los pozos cortan las calles. Esta es la voz de quienes viven al margen del camino pavimentado.</p>
+        <a class="btn" href="#problema">Conocer más <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+      </div>
+    </section>
+
+    <!-- Location -->
+    <section id="location" aria-labelledby="loc-title" class="fade">
+      <div class="container">
+        <div class="section-title"><h2 id="loc-title">Corpus Christi, Misiones</h2></div>
+        <p class="section-intro">Una comunidad con gran potencial limitada por la falta de infraestructura adecuada.</p>
+
+        <div class="location-grid">
+          <!-- Map: mantuve el embed proporcionado originalmente -->
+          <div class="map-wrap" aria-hidden="false">
+            <iframe
+              title="Mapa de Corpus Christi, Misiones"
+              loading="lazy"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14215.235033130022!2d-55.52372273476561!3d-27.134399999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94f8f5f58c2c6b7f%3A0x5b1f5c5b5b5b5b5b!2sCorpus%20Christi%2C%20Misiones!5e0!3m2!1ses!2sar!4v1652456789012!5m2!1ses!2sar"
+              referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+          </div>
+
+          <div class="location-info">
+            <h3>Nuestra Comunidad</h3>
+            <p>Corpus Christi es una localidad de la provincia de Misiones, Argentina, situada en el departamento de San Ignacio. Con una población aproximada de 3.000 habitantes, nuestra comunidad se caracteriza por su identidad cultural y su conexión con la naturaleza.</p>
+            <p>La economía local depende de la agricultura (yerba mate, té, tabaco), ganadería y explotación forestal.</p>
+
+            <div class="stats" aria-hidden="false">
+              <div class="stat"><div class="num">3.000</div><div class="label">Habitantes</div></div>
+              <div class="stat"><div class="num">85%</div><div class="label">Dependen de la agricultura</div></div>
+              <div class="stat"><div class="num">60%</div><div class="label">Caminos sin pavimentar</div></div>
+              <div class="stat"><div class="num">12</div><div class="label">Días de aislamiento/año</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem (images) -->
+    <section id="problema" aria-labelledby="prob-title" class="fade">
+      <div class="container">
+        <div class="section-title"><h2 id="prob-title">El Problema en Imágenes</h2></div>
+        <p class="section-intro">La falta de infraestructura vial afecta todos los aspectos de la vida en nuestra comunidad.</p>
+
+        <div class="problem-grid" role="list">
+          <article class="card" role="listitem">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1574879540442-788189d47a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80" alt="Camino con pozos" loading="lazy"></div>
+            <div class="body">
+              <h3>Peligro para el Transporte</h3>
+              <p>Los caminos llenos de pozos representan un riesgo constante para los vehículos que transitan diariamente.</p>
+              <a class="read-more" href="#" onclick="return false">Leer más <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1593941707882-a5b2b78a6083?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80" alt="Camino embarrado" loading="lazy"></div>
+            <div class="body">
+              <h3>Aislamiento después de la lluvia</h3>
+              <p>Las precipitaciones convierten los caminos de tierra en trampas de barro que impiden el paso de vehículos y aíslan a las familias.</p>
+              <a class="read-more" href="#" onclick="return false">Leer más <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="card" role="listitem">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1593118241882-0d785e4e5d13?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80" alt="Dificultad transporte de productos" loading="lazy"></div>
+            <div class="body">
+              <h3>Dificultad para Productores</h3>
+              <p>Los productores locales no pueden sacar sus cosechas en tiempo y forma, afectando la economía de toda la comunidad.</p>
+              <a class="read-more" href="#" onclick="return false">Leer más <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interview -->
+    <section id="entrevista" aria-labelledby="int-title" class="fade">
+      <div class="container">
+        <div class="section-title"><h2 id="int-title">Entrevista Completa</h2></div>
+        <p class="section-intro">Conversamos con quienes viven la problemática a diario.</p>
+
+        <div class="interview">
+          <div class="avatar" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Retrato de Carlos Benítez" loading="lazy">
+          </div>
+          <div class="info">
+            <h3>Carlos Benítez</h3>
+            <div style="color:var(--color-secondary);font-weight:700">Productor de yerba mate — Paraje Santa María</div>
+            <p style="margin-top:.6rem">"Llevo más de 20 años trabajando estas tierras y nunca vi los caminos en un estado tan deplorable. Cada vez que llueve, nos quedamos incomunicados."</p>
+
+            <!-- Audio player -->
+            <div id="audio-block" style="margin-top:1rem">
+              <div class="audio-player" role="region" aria-label="Reproductor de entrevista">
+                <button class="play-btn" id="play-btn" aria-pressed="false" aria-label="Reproducir entrevista">
+                  <i class="fas fa-play" aria-hidden="true"></i>
+                </button>
+                <div class="progress" id="progress" tabindex="0" aria-label="Barra de progreso de audio" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <div class="bar" id="progress-bar"></div>
+                </div>
+                <div class="time" id="time">00:00 / 00:00</div>
+              </div>
+              <div style="margin-top:.8rem;color:#444">Duración aproximada: 24:30</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reflection -->
+    <section id="reflexion" class="reflection fade" aria-labelledby="ref-title">
+      <div class="inner">
+        <h2 id="ref-title">Reflexión: Más que Pozos en el Camino</h2>
+        <p style="max-width:860px;margin:1rem auto;font-size:1rem">
+          Esta recorrida por los caminos de nuestro Corpus Christi nos deja una enseñanza clara. Los grandes medios suelen mirar hacia otro lado cuando se trata de problemas locales.
+          <span class="highlight">Las voces que acabamos de escuchar —la de Carlos, la de María, la de Pedro— son las que siempre quedan afuera.</span>
+          El rol de nuestra radio comunitaria es ese: amplificar esas voces silenciadas. Contar la historia desde el barro en los zapatos de un niño, no desde números.
+        </p>
+        <p style="max-width:860px;margin:0 auto 1.6rem;font-size:1rem">
+          Porque al final, un camino en mal estado no es solo tierra y pozos. Es un problema de educación, economía, salud y dignidad. Y hoy, gracias a estas voces, ese problema ya no es invisible.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="foot-inner">
+      <p>© <span id="copy-year"></span> La Voz del Barrio — Corpus Christi, Misiones. Todos los derechos reservados.</p>
+      <p style="margin-top:.6rem">Contacto: <a href="mailto:contacto@lavozdelbarrio.com">contacto@lavozdelbarrio.com</a> — Tel: (0376) 154-123456</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    (function(){
+      // Cache elementos (protegido con comprobaciones)
+      const header = document.getElementById('site-header');
+      const menuToggle = document.getElementById('menu-toggle');
+      const mainNav = document.getElementById('main-nav');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const fades = document.querySelectorAll('.fade');
+      const copyYear = document.getElementById('copy-year');
+
+      // Insertar año actual en footer
+      if(copyYear) copyYear.textContent = new Date().getFullYear();
+
+      // Ajustar --header-height CSS variable dinámicamente (evita solapes)
+      function updateHeaderHeight(){
+        if(!header) return;
+        const h = header.offsetHeight;
+        document.documentElement.style.setProperty('--header-height', h + 'px');
+      }
+      window.addEventListener('load', updateHeaderHeight);
+      window.addEventListener('resize', updateHeaderHeight);
+
+      // Menu movil: toggle y accesibilidad teclado
+      if(menuToggle && mainNav){
+        menuToggle.addEventListener('click', () => {
+          const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+          menuToggle.setAttribute('aria-expanded', String(!expanded));
+          mainNav.classList.toggle('show');
+        });
+        menuToggle.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            menuToggle.click();
+          }
+        });
+      }
+
+      // Cerrar menu al click fuera
+      document.addEventListener('click', (e) => {
+        if(!mainNav || !menuToggle) return;
+        if(mainNav.classList.contains('show') && !e.target.closest('#main-nav') && !e.target.closest('#menu-toggle')){
+          mainNav.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded','false');
+        }
+      });
+
+      // Header effect on scroll
+      window.addEventListener('scroll', () => {
+        if(!header) return;
+        if(window.scrollY > 40) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+      }, {passive:true});
+
+      // Smooth scroll with header offset for internal links
+      function getHeaderOffset(){
+        return header ? header.offsetHeight : 72;
+      }
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        // keep external anchors that are just "#"
+        a.addEventListener('click', (e) => {
+          const href = a.getAttribute('href');
+          if(!href || href === '#') return;
+          const target = document.querySelector(href);
+          if(!target) return;
+          e.preventDefault();
+          // Update active class in nav
+          navLinks.forEach(n => n.classList.remove('active'));
+          if(a.classList.contains('nav-link')) a.classList.add('active');
+
+          const top = target.getBoundingClientRect().top + window.scrollY - getHeaderOffset() - 8;
+          window.scrollTo({top, behavior:'smooth'});
+
+          // Close mobile if open
+          if(mainNav && mainNav.classList.contains('show')){
+            mainNav.classList.remove('show');
+            if(menuToggle) menuToggle.setAttribute('aria-expanded','false');
+          }
+        });
+      });
+
+      // IntersectionObserver para fades (progressive reveal)
+      if('IntersectionObserver' in window && fades.length){
+        const obs = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if(entry.isIntersecting){
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {threshold: 0.12, rootMargin: "0px 0px -6% 0px"});
+        fades.forEach(f => obs.observe(f));
+      } else {
+        // Fallback: mostrar todos si no hay observer
+        fades.forEach(f => f.classList.add('visible'));
+      }
+
+      /* ---------------------------
+         Audio player (simulado / real)
+         --------------------------- */
+      const playBtn = document.getElementById('play-btn');
+      const progress = document.getElementById('progress');
+      const progressBar = document.getElementById('progress-bar');
+      const timeEl = document.getElementById('time');
+
+      // Puedes reemplazar esta URL por tu archivo real (mp3)
+      const audioSrc = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+      let audio;
+      if(typeof Audio !== 'undefined'){
+        audio = new Audio();
+        audio.src = audioSrc;
+        audio.preload = 'metadata';
+      }
+
+      // Utility para formatear segundos a mm:ss
+      function formatTime(t){
+        if(!isFinite(t) || t <= 0) return '00:00';
+        const m = Math.floor(t / 60);
+        const s = Math.floor(t % 60);
+        return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      }
+
+      if(playBtn && audio && progress && progressBar && timeEl){
+        let isSeeking = false;
+
+        // Botón play/pause
+        playBtn.addEventListener('click', () => {
+          if(audio.paused){
+            audio.play().catch(err => {
+              // Manejo de errores por autoplay bloqueado
+              console.warn('No se pudo reproducir automáticamente:', err);
+            });
+            playBtn.setAttribute('aria-pressed','true');
+            playBtn.innerHTML = '<i class="fas fa-pause" aria-hidden="true"></i>';
+          } else {
+            audio.pause();
+            playBtn.setAttribute('aria-pressed','false');
+            playBtn.innerHTML = '<i class="fas fa-play" aria-hidden="true"></i>';
+          }
+        });
+
+        // Actualizar progress/time mientras se reproduce
+        audio.addEventListener('timeupdate', () => {
+          if(!isSeeking && audio.duration){
+            const pct = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = pct + '%';
+            progress.setAttribute('aria-valuenow', String(Math.round(pct)));
+            timeEl.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+          }
+        });
+
+        // Cuando cargue metadata (duración)
+        audio.addEventListener('loadedmetadata', () => {
+          timeEl.textContent = `${formatTime(0)} / ${formatTime(audio.duration)}`;
+        });
+
+        // Cuando termina
+        audio.addEventListener('ended', () => {
+          playBtn.setAttribute('aria-pressed','false');
+          playBtn.innerHTML = '<i class="fas fa-play" aria-hidden="true"></i>';
+          progressBar.style.width = '0%';
+          progress.setAttribute('aria-valuenow', '0');
+        });
+
+        // Click en barra para hacer seek
+        function seekFromEvent(e){
+          const rect = progress.getBoundingClientRect();
+          const x = ('clientX' in e) ? e.clientX : (e.touches && e.touches[0] && e.touches[0].clientX);
+          if(typeof x !== 'number') return;
+          const rel = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+          if(audio.duration && isFinite(audio.duration)){
+            audio.currentTime = rel * audio.duration;
+            progressBar.style.width = (rel * 100) + '%';
+            progress.setAttribute('aria-valuenow', String(Math.round(rel * 100)));
+            timeEl.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+          }
+        }
+        progress.addEventListener('click', (e) => seekFromEvent(e));
+        // soportar touch
+        progress.addEventListener('touchstart', (e) => seekFromEvent(e));
+
+        // Soporte teclado para slider (izq / der)
+        progress.addEventListener('keydown', (e) => {
+          if(!audio.duration || !isFinite(audio.duration)) return;
+          const step = audio.duration * 0.05; // 5% step
+          if(e.key === 'ArrowRight'){
+            e.preventDefault();
+            audio.currentTime = Math.min(audio.duration, audio.currentTime + step);
+          } else if(e.key === 'ArrowLeft'){
+            e.preventDefault();
+            audio.currentTime = Math.max(0, audio.currentTime - step);
+          } else if(e.key === ' ' || e.key === 'Enter'){
+            e.preventDefault();
+            playBtn.click();
+          }
+        });
+      }
+
+      // Evitar scroll cuando menú está abierto en móvil para ciertos navegadores (suave)
+      document.addEventListener('touchmove', (e) => {
+        if(mainNav && mainNav.classList.contains('show')) e.preventDefault();
+      }, {passive:false});
+
+      // Protección general: si algún elemento crítico falta, evitar errores
+      window.addEventListener('error', (ev) => {
+        // sólo logueamos para desarrollo; no romper UX
+        console.warn('Error capturado (no crítico):', ev.message);
+      });
+
+    })();
+  </script>
+</body>
+</html>
