@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +7,7 @@
 
   <!-- Fonts & icons -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <style>
     :root{
@@ -71,7 +70,7 @@
     .hero{
       background:
         linear-gradient(135deg, rgba(44,62,80,0.82), rgba(231,76,60,0.75)),
-        url('https://images.unsplash.com/photo-1593941707882-a5b2b78a6083?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+        url('hero.jpg') center/cover no-repeat;
       color:#fff;
       display:flex;align-items:center;justify-content:center;text-align:center;
       min-height:calc(80vh);padding:4rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);
@@ -103,7 +102,7 @@
     /* Problem grid (images) */
     .problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.2rem}
     .card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid rgba(0,0,0,.04)}
-    .card .img-wrap{height:200px;overflow:hidden}
+    .card .img-wrap{height:200px;overflow:hidden;position:relative}
     .card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
     .card:hover img{transform:scale(1.05)}
     .card .body{padding:1rem;flex:1;display:flex;flex-direction:column}
@@ -123,6 +122,28 @@
     .progress .bar{height:100%;width:0;background:var(--color-secondary);transition:width .15s linear}
     .time{min-width:110px;text-align:right;color:#444;font-weight:600;font-size:.95rem}
 
+    /* Coming soon section */
+    .coming-soon {
+      text-align: center;
+      background: #f5f5f5;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-top: 2rem;
+    }
+    .coming-soon-icon {
+      font-size: 3rem;
+      color: var(--color-secondary);
+      margin-bottom: 1rem;
+    }
+    .coming-soon-badge {
+      background: var(--color-primary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
     /* Reflection area (dark) */
     .reflection{background:linear-gradient(135deg,var(--color-primary),#111827);color:#fff;border-top:1px solid rgba(255,255,255,0.03)}
     .reflection .inner{max-width:920px;margin:0 auto;padding:2.4rem 1rem;text-align:center}
@@ -133,13 +154,31 @@
     footer .foot-inner{max-width:1100px;margin:0 auto;text-align:center}
     footer a{color:#fff;text-decoration:underline;opacity:.95}
 
+    /* Loading state for images */
+    .img-wrap:empty::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
     /* Fade in helper */
     .fade {opacity:0;transform:translateY(28px);transition:opacity .6s,transform .6s}
     .fade.visible{opacity:1;transform:none}
 
     /* Responsive */
     @media (max-width:900px){
-      nav ul{display:none;position:absolute;right:1rem;top:calc(100% + 8px);flex-direction:column;background:rgba(44,62,80,0.98);border-radius:8px;padding:.6rem;min-width:200px}
+      nav ul{display:none;position:absolute;right:1rem;top:calc(100% + 8px);flex-direction:column;background:rgba(44,62,80,0.98);backdrop-filter: blur(8px);border-radius:8px;padding:.6rem;min-width:200px;box-shadow: var(--shadow)}
       nav ul.show{display:flex}
       .btn-menu{display:inline-flex}
       nav ul a{padding:.6rem 1rem;display:block}
@@ -152,6 +191,7 @@
     @media (max-width:480px){
       .hero h1{font-size:1.6rem}
       .hero p{font-size:.95rem}
+      .container{width:96%}
     }
   </style>
 </head>
@@ -236,7 +276,7 @@
 
         <div class="problem-grid" role="list">
           <article class="card" role="listitem">
-            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1574879540442-788189d47a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80" alt="Camino con pozos" loading="lazy"></div>
+            <div class="img-wrap"><img src="problema1.jpg" alt="Camino con pozos y deteriorado en zona rural" loading="lazy" onerror="this.style.display='none'"></div>
             <div class="body">
               <h3>Peligro para el Transporte</h3>
               <p>Los caminos llenos de pozos representan un riesgo constante para los vehículos que transitan diariamente.</p>
@@ -245,7 +285,7 @@
           </article>
 
           <article class="card" role="listitem">
-            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1593941707882-a5b2b78a6083?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80" alt="Camino embarrado" loading="lazy"></div>
+            <div class="img-wrap"><img src="problema2.jpg" alt="Camino embarrado después de la lluvia" loading="lazy" onerror="this.style.display='none'"></div>
             <div class="body">
               <h3>Aislamiento después de la lluvia</h3>
               <p>Las precipitaciones convierten los caminos de tierra en trampas de barro que impiden el paso de vehículos y aíslan a las familias.</p>
@@ -254,7 +294,7 @@
           </article>
 
           <article class="card" role="listitem">
-            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1593118241882-0d785e4e5d13?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80" alt="Dificultad transporte de productos" loading="lazy"></div>
+            <div class="img-wrap"><img src="problema3.jpg" alt="Camión transitando por camino en mal estado" loading="lazy" onerror="this.style.display='none'"></div>
             <div class="body">
               <h3>Dificultad para Productores</h3>
               <p>Los productores locales no pueden sacar sus cosechas en tiempo y forma, afectando la economía de toda la comunidad.</p>
@@ -269,31 +309,28 @@
     <section id="entrevista" aria-labelledby="int-title" class="fade">
       <div class="container">
         <div class="section-title"><h2 id="int-title">Entrevista Completa</h2></div>
-        <p class="section-intro">Conversamos con quienes viven la problemática a diario.</p>
+        <p class="section-intro">Próximamente: la voz de quienes viven la problemática a diario.</p>
 
         <div class="interview">
           <div class="avatar" aria-hidden="true">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Retrato de Carlos Benítez" loading="lazy">
+            <img src="entrevista.jpg" alt="Micrófono de entrevista - imagen ilustrativa" loading="lazy" onerror="this.style.display='none'">
           </div>
           <div class="info">
-            <h3>Carlos Benítez</h3>
-            <div style="color:var(--color-secondary);font-weight:700">Productor de yerba mate — Paraje Santa María</div>
-            <p style="margin-top:.6rem">"Llevo más de 20 años trabajando estas tierras y nunca vi los caminos en un estado tan deplorable. Cada vez que llueve, nos quedamos incomunicados."</p>
+            <h3>Entrevista en Producción</h3>
+            <div style="color:var(--color-secondary);font-weight:700">Próximamente disponible</div>
+            <p style="margin-top:.6rem">Actualmente estamos realizando las entrevistas con los vecinos afectados por el estado de los caminos. En los próximos días publicaremos aquí el testimonio completo de quienes viven esta realidad a diario.</p>
 
-            <!-- Audio player -->
-            <div id="audio-block" style="margin-top:1rem">
-              <div class="audio-player" role="region" aria-label="Reproductor de entrevista">
-                <button class="play-btn" id="play-btn" aria-pressed="false" aria-label="Reproducir entrevista">
-                  <i class="fas fa-play" aria-hidden="true"></i>
-                </button>
-                <div class="progress" id="progress" tabindex="0" aria-label="Barra de progreso de audio" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                  <div class="bar" id="progress-bar"></div>
-                </div>
-                <div class="time" id="time">00:00 / 00:00</div>
+            <!-- Mensaje de próximo estreno -->
+            <div id="audio-block" style="margin-top:2rem; text-align:center; background:#f5f5f5; padding:2rem; border-radius:12px;">
+              <div style="font-size:3rem; color:var(--color-secondary); margin-bottom:1rem;">
+                <i class="fas fa-microphone-alt" aria-hidden="true"></i>
               </div>
-              <div style="margin-top:.8rem;color:#444">Duración aproximada: 24:30</div>
+              <h3 style="color:var(--color-primary); margin-bottom:1rem;">Entrevista en Producción</h3>
+              <p style="color:#555; margin-bottom:1.5rem;">Estamos trabajando en una entrevista especial de aproximadamente 6 minutos con los vecinos de Corpus Christi.</p>
+              <div style="background:var(--color-primary); color:white; padding:0.5rem 1rem; border-radius:999px; display:inline-block;">
+                Próximamente disponible
+              </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -318,9 +355,8 @@
   <!-- Footer -->
   <footer role="contentinfo">
     <div class="foot-inner">
-      <p>© <span id="copy-year"></span> La Voz del Barrio — Corpus Christi, Misiones. Todos los derechos reservados.</p>
-      <p style="margin-top:.6rem">Contacto: <a href="mailto:contacto@lavozdelbarrio.com">contacto@lavozdelbarrio.com</a> — Tel: (0376) 154-123456</p>
-    </div>
+      <p>© <span id="copy-year"></span> La Voz del Barrio — Corpus Christi, Misiones. Dilan // Mister.</p>
+      </div>
   </footer>
 
   <!-- Scripts -->
@@ -348,7 +384,8 @@
 
       // Menu movil: toggle y accesibilidad teclado
       if(menuToggle && mainNav){
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
           const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
           menuToggle.setAttribute('aria-expanded', String(!expanded));
           mainNav.classList.toggle('show');
@@ -364,7 +401,7 @@
       // Cerrar menu al click fuera
       document.addEventListener('click', (e) => {
         if(!mainNav || !menuToggle) return;
-        if(mainNav.classList.contains('show') && !e.target.closest('#main-nav') && !e.target.closest('#menu-toggle')){
+        if(mainNav.classList.contains('show') && !e.target.closest('nav')){
           mainNav.classList.remove('show');
           menuToggle.setAttribute('aria-expanded','false');
         }
@@ -381,6 +418,7 @@
       function getHeaderOffset(){
         return header ? header.offsetHeight : 72;
       }
+      
       document.querySelectorAll('a[href^="#"]').forEach(a => {
         // keep external anchors that are just "#"
         a.addEventListener('click', (e) => {
@@ -420,116 +458,19 @@
         fades.forEach(f => f.classList.add('visible'));
       }
 
-      /* ---------------------------
-         Audio player (simulado / real)
-         --------------------------- */
-      const playBtn = document.getElementById('play-btn');
-      const progress = document.getElementById('progress');
-      const progressBar = document.getElementById('progress-bar');
-      const timeEl = document.getElementById('time');
-
-      // Puedes reemplazar esta URL por tu archivo real (mp3)
-      const audioSrc = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-      let audio;
-      if(typeof Audio !== 'undefined'){
-        audio = new Audio();
-        audio.src = audioSrc;
-        audio.preload = 'metadata';
+      // Precargar imágenes importantes para mejor rendimiento
+      function preloadImage(url) {
+        const img = new Image();
+        img.src = url;
       }
-
-      // Utility para formatear segundos a mm:ss
-      function formatTime(t){
-        if(!isFinite(t) || t <= 0) return '00:00';
-        const m = Math.floor(t / 60);
-        const s = Math.floor(t % 60);
-        return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-      }
-
-      if(playBtn && audio && progress && progressBar && timeEl){
-        let isSeeking = false;
-
-        // Botón play/pause
-        playBtn.addEventListener('click', () => {
-          if(audio.paused){
-            audio.play().catch(err => {
-              // Manejo de errores por autoplay bloqueado
-              console.warn('No se pudo reproducir automáticamente:', err);
-            });
-            playBtn.setAttribute('aria-pressed','true');
-            playBtn.innerHTML = '<i class="fas fa-pause" aria-hidden="true"></i>';
-          } else {
-            audio.pause();
-            playBtn.setAttribute('aria-pressed','false');
-            playBtn.innerHTML = '<i class="fas fa-play" aria-hidden="true"></i>';
-          }
-        });
-
-        // Actualizar progress/time mientras se reproduce
-        audio.addEventListener('timeupdate', () => {
-          if(!isSeeking && audio.duration){
-            const pct = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = pct + '%';
-            progress.setAttribute('aria-valuenow', String(Math.round(pct)));
-            timeEl.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-          }
-        });
-
-        // Cuando cargue metadata (duración)
-        audio.addEventListener('loadedmetadata', () => {
-          timeEl.textContent = `${formatTime(0)} / ${formatTime(audio.duration)}`;
-        });
-
-        // Cuando termina
-        audio.addEventListener('ended', () => {
-          playBtn.setAttribute('aria-pressed','false');
-          playBtn.innerHTML = '<i class="fas fa-play" aria-hidden="true"></i>';
-          progressBar.style.width = '0%';
-          progress.setAttribute('aria-valuenow', '0');
-        });
-
-        // Click en barra para hacer seek
-        function seekFromEvent(e){
-          const rect = progress.getBoundingClientRect();
-          const x = ('clientX' in e) ? e.clientX : (e.touches && e.touches[0] && e.touches[0].clientX);
-          if(typeof x !== 'number') return;
-          const rel = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
-          if(audio.duration && isFinite(audio.duration)){
-            audio.currentTime = rel * audio.duration;
-            progressBar.style.width = (rel * 100) + '%';
-            progress.setAttribute('aria-valuenow', String(Math.round(rel * 100)));
-            timeEl.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-          }
-        }
-        progress.addEventListener('click', (e) => seekFromEvent(e));
-        // soportar touch
-        progress.addEventListener('touchstart', (e) => seekFromEvent(e));
-
-        // Soporte teclado para slider (izq / der)
-        progress.addEventListener('keydown', (e) => {
-          if(!audio.duration || !isFinite(audio.duration)) return;
-          const step = audio.duration * 0.05; // 5% step
-          if(e.key === 'ArrowRight'){
-            e.preventDefault();
-            audio.currentTime = Math.min(audio.duration, audio.currentTime + step);
-          } else if(e.key === 'ArrowLeft'){
-            e.preventDefault();
-            audio.currentTime = Math.max(0, audio.currentTime - step);
-          } else if(e.key === ' ' || e.key === 'Enter'){
-            e.preventDefault();
-            playBtn.click();
-          }
-        });
-      }
-
-      // Evitar scroll cuando menú está abierto en móvil para ciertos navegadores (suave)
-      document.addEventListener('touchmove', (e) => {
-        if(mainNav && mainNav.classList.contains('show')) e.preventDefault();
-      }, {passive:false});
-
-      // Protección general: si algún elemento crítico falta, evitar errores
-      window.addEventListener('error', (ev) => {
-        // sólo logueamos para desarrollo; no romper UX
-        console.warn('Error capturado (no crítico):', ev.message);
+      
+      // Precargar imágenes de hero y cards
+      window.addEventListener('load', function() {
+        preloadImage('hero.jpg');
+        preloadImage('problema1.jpg');
+        preloadImage('problema2.jpg');
+        preloadImage('problema3.jpg');
+        preloadImage('entrevista.jpg');
       });
 
     })();
